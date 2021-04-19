@@ -32,7 +32,7 @@ public class Metadata: Object, Codable {
         /// Last Read Time Key.
         @available(*, deprecated, message: "Deprecated in version 3.17.0. Please use Metadata.CodingKeys.lastReadTime instead")
         internal static let lastReadTime = "lrt"
-    
+        
     }
     
     @objc
@@ -74,7 +74,7 @@ public class Metadata: Object, Codable {
     open internal(set) dynamic var authtoken: String?
     
     /// Default Constructor.
-    public required init() {
+    public required override init() {
         super.init()
     }
     
@@ -103,22 +103,6 @@ public class Metadata: Object, Codable {
     
     // MARK: Realm
     
-    /**
-     WARNING: This is an internal initializer not intended for public use.
-     :nodoc:
-     */
-    public required init(realm: RLMRealm, schema: RLMObjectSchema) {
-        super.init(realm: realm, schema: schema)
-    }
-    
-    /**
-     WARNING: This is an internal initializer not intended for public use.
-     :nodoc:
-     */
-    public required init(value: Any, schema: RLMSchema) {
-        super.init(value: value, schema: schema)
-    }
-    
     /// Constructor that validates if the map can be build a new instance of Metadata.
     @available(*, deprecated, message: "Deprecated in version 3.18.0. Please use Swift.Codable instead")
     public required convenience init?(map: Map) {
@@ -132,7 +116,7 @@ public class Metadata: Object, Codable {
         ect <- (CodingKeys.entityCreationTime.rawValue, map[CodingKeys.entityCreationTime])
         authtoken <- (CodingKeys.authtoken.rawValue, map[CodingKeys.authtoken])
     }
-
+    
 }
 
 extension Metadata: JSONDecodable {
@@ -220,14 +204,6 @@ public final class UserMetadata: Metadata {
         try super.encode(to: encoder)
     }
     
-    public required init(realm: RLMRealm, schema: RLMObjectSchema) {
-        super.init(realm: realm, schema: schema)
-    }
-    
-    public required init(value: Any, schema: RLMSchema) {
-        super.init(value: value, schema: schema)
-    }
-    
     @available(*, deprecated, message: "Deprecated in version 3.18.0. Please use Swift.Codable instead")
     public override func mapping(map: Map) {
         super.mapping(map: map)
@@ -236,7 +212,7 @@ public final class UserMetadata: Metadata {
         passwordReset <- (UserMetadataCodingKeys.passwordReset.rawValue, map[UserMetadataCodingKeys.passwordReset])
         userStatus <- (UserMetadataCodingKeys.userStatus.rawValue, map[UserMetadataCodingKeys.userStatus])
     }
-
+    
 }
 
 /// Status of the email verification process for each `User`
@@ -274,7 +250,7 @@ public final class EmailVerification: Object, Codable {
     /// Email Address
     public internal(set) var emailAddress: String?
     
-    public required init() {
+    public required override init() {
         super.init()
     }
     
@@ -302,14 +278,6 @@ public final class EmailVerification: Object, Codable {
         try container.encodeIfPresent(lsca, forKey: .lastStateChangeAt)
         try container.encodeIfPresent(lca, forKey: .lastConfirmedAt)
         try container.encodeIfPresent(emailAddress, forKey: .emailAddress)
-    }
-    
-    public required init(realm: RLMRealm, schema: RLMObjectSchema) {
-        super.init(realm: realm, schema: schema)
-    }
-    
-    public required init(value: Any, schema: RLMSchema) {
-        super.init(value: value, schema: schema)
     }
 }
 
@@ -351,7 +319,7 @@ public final class PasswordReset: Object, Codable {
         }
     }
     
-    public required init() {
+    public required override init() {
         super.init()
     }
     
@@ -373,14 +341,6 @@ public final class PasswordReset: Object, Codable {
         var container = encoder.container(keyedBy: PasswordResetCodingKeys.self)
         try container.encodeIfPresent(status, forKey: .status)
         try container.encodeIfPresent(lsca, forKey: .lastStateChangeAt)
-    }
-    
-    public required init(realm: RLMRealm, schema: RLMObjectSchema) {
-        super.init(realm: realm, schema: schema)
-    }
-    
-    public required init(value: Any, schema: RLMSchema) {
-        super.init(value: value, schema: schema)
     }
 }
 
@@ -456,3 +416,4 @@ extension UserStatus: Mappable {
     }
     
 }
+

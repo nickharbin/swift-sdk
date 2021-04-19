@@ -34,25 +34,25 @@ extension Persistable where Self: Entity {
     public func observe(_ block: @escaping (ObjectChange<Self>) -> Void) -> AnyNotificationToken? {
         let completionHandler = { (objectChange: RealmSwift.ObjectChange) in
             switch objectChange {
-            case .change(let propertyChanges):
-                for propertyChange in propertyChanges {
-                    if let newValue = propertyChange.newValue, !(newValue is NSNull) {
-                        self[propertyChange.name] = newValue
-                    } else {
-                        self[propertyChange.name] = nil
+                case .change(_, let propertyChanges):
+                    for propertyChange in propertyChanges {
+                        if let newValue = propertyChange.newValue, !(newValue is NSNull) {
+                            self[propertyChange.name] = newValue
+                        } else {
+                            self[propertyChange.name] = nil
+                        }
                     }
-                }
-                block(.change(self))
-            case .deleted:
-                block(.deleted)
-            case .error(let error):
-                block(.error(error))
+                    block(.change(self))
+                case .deleted:
+                    block(.deleted)
+                case .error(let error):
+                    block(.error(error))
             }
         }
         guard let realmConfiguration = realmConfiguration,
-            let entityIdReference = entityIdReference,
-            let realm = try? Realm(configuration: realmConfiguration),
-            let entity = realm.object(ofType: Self.self, forPrimaryKey: entityIdReference)
+              let entityIdReference = entityIdReference,
+              let realm = try? Realm(configuration: realmConfiguration),
+              let entity = realm.object(ofType: Self.self, forPrimaryKey: entityIdReference)
         else {
             return nil
         }
@@ -76,8 +76,8 @@ internal func kinveyMappingType<Transform: TransformType>(left: String, right: S
 fileprivate func _kinveyMappingType(left: String, right: String, transform: AnyTransform? = nil) {
     autoreleasepool {
         guard let className = currentMappingClass,
-            var classMapping = kinveyProperyMapping[className],
-            classMapping[left] == nil
+              var classMapping = kinveyProperyMapping[className],
+              classMapping[left] == nil
         else {
             return
         }
@@ -300,3 +300,4 @@ extension Persistable where Self: NSObject {
     }
     
 }
+

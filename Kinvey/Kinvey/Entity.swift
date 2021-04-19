@@ -86,24 +86,8 @@ open class Entity: Object, Persistable {
     internal var entityIdReference: String?
     
     /// Default Constructor.
-    public required init() {
+    public required override init() {
         super.init()
-    }
-
-    /**
-     WARNING: This is an internal initializer not intended for public use.
-     :nodoc:
-     */
-    public required init(realm: RLMRealm, schema: RLMObjectSchema) {
-        super.init(realm: realm, schema: schema)
-    }
-
-    /**
-     WARNING: This is an internal initializer not intended for public use.
-     :nodoc:
-     */
-    public required init(value: Any, schema: RLMSchema) {
-        super.init(value: value, schema: schema)
     }
     
     public required init(from decoder: Decoder) throws {
@@ -138,18 +122,18 @@ open class Entity: Object, Persistable {
         var properties = [String](arrayLiteral: "entityIdReference")
         for (propertyName, (type, subType)) in ObjCRuntime.properties(forClass: self) {
             if let type = type,
-                let typeClass = NSClassFromString(type),
-                !(ObjCRuntime.type(typeClass, isSubtypeOf: NSDate.self) ||
-                ObjCRuntime.type(typeClass, isSubtypeOf: NSData.self) ||
-                ObjCRuntime.type(typeClass, isSubtypeOf: NSString.self) ||
-                ObjCRuntime.type(typeClass, isSubtypeOf: RLMObjectBase.self) ||
-                ObjCRuntime.type(typeClass, isSubtypeOf: RLMOptionalBase.self) ||
-                ObjCRuntime.type(typeClass, isSubtypeOf: RLMListBase.self) ||
-                ObjCRuntime.type(typeClass, isSubtypeOf: RLMCollection.self))
+               let typeClass = NSClassFromString(type),
+               !(ObjCRuntime.type(typeClass, isSubtypeOf: NSDate.self) ||
+                    ObjCRuntime.type(typeClass, isSubtypeOf: NSData.self) ||
+                    ObjCRuntime.type(typeClass, isSubtypeOf: NSString.self) ||
+                    ObjCRuntime.type(typeClass, isSubtypeOf: RLMObjectBase.self) ||
+                    ObjCRuntime.type(typeClass, isSubtypeOf: RLMOptionalBase.self) ||
+                    ObjCRuntime.type(typeClass, isSubtypeOf: RLMListBase.self) ||
+                    ObjCRuntime.type(typeClass, isSubtypeOf: RLMCollection.self))
             {
                 properties.append(propertyName)
             } else if let subType = subType,
-                let _ = NSProtocolFromString(subType)
+                      let _ = NSProtocolFromString(subType)
             {
                 properties.append(propertyName)
             }
@@ -289,9 +273,9 @@ extension ListSupportedValue {
     
     fileprivate func isEqual(_ this: Self, _ object: Any?) -> Bool {
         switch object {
-        case let other as Self: return this.value == other.value
-        case let value as Self.Value: return this.value == value
-        default: return false
+            case let other as Self: return this.value == other.value
+            case let value as Self.Value: return this.value == value
+            default: return false
         }
     }
     
@@ -595,3 +579,4 @@ extension BoolValue: Encodable {
     }
     
 }
+

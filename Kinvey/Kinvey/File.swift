@@ -12,7 +12,7 @@ import Realm
 
 /// Class that represents a file in the backend holding all metadata of the file, but don't hold the data itself.
 open class File: Object, JSONCodable {
-
+    
     /// `_id` property of the file.
     @objc
     open dynamic var fileId: String?
@@ -66,9 +66,9 @@ open class File: Object, JSONCodable {
         set {
             upload = newValue?.absoluteString
         }
-    
+        
     }
-
+    
     /// Expiration data of the `downloadURL`.
     @objc
     open dynamic var expiresAt: Date?
@@ -82,7 +82,7 @@ open class File: Object, JSONCodable {
     open internal(set) dynamic var path: String? {
         didSet {
             if let path = path,
-                let documentURL = FileManager.default.urls(for: FileManager.SearchPathDirectory.documentDirectory, in: FileManager.SearchPathDomainMask.userDomainMask).first
+               let documentURL = FileManager.default.urls(for: FileManager.SearchPathDirectory.documentDirectory, in: FileManager.SearchPathDomainMask.userDomainMask).first
             {
                 let baseURL = documentURL.deletingLastPathComponent()
                 let relativePath = path.replacingOccurrences(of: baseURL.path, with: "~")
@@ -145,17 +145,9 @@ open class File: Object, JSONCodable {
         case uploadHeaders = "_requiredHeaders"
         
     }
-
-    public required init() {
+    
+    public required override init() {
         super.init()
-    }
-    
-    public required init(realm: RLMRealm, schema: RLMObjectSchema) {
-        super.init(realm: realm, schema: schema)
-    }
-    
-    public required init(value: Any, schema: RLMSchema) {
-        super.init(value: value, schema: schema)
     }
     
     public init(from decoder: Decoder) throws {
@@ -177,7 +169,7 @@ open class File: Object, JSONCodable {
     
     open func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: FileCodingKeys.self)
-
+        
         try container.encodeIfPresent(fileId, forKey: .entityId)
         try container.encodeIfPresent(acl, forKey: .acl)
         try container.encodeIfPresent(metadata, forKey: .metadata)
@@ -189,7 +181,7 @@ open class File: Object, JSONCodable {
         try container.encodeIfPresent(download, forKey: .download)
         try container.encodeIfPresent(expiresAt, forKey: .expiresAt)
         try container.encodeIfPresent(uploadHeaders, forKey: .uploadHeaders)
-
+        
     }
     
     open class func decodeArray<T>(from data: Data) throws -> [T] where T : JSONDecodable {
@@ -212,7 +204,7 @@ open class File: Object, JSONCodable {
     open func encode() throws -> [String : Any] {
         return try encodeJSONEncodable()
     }
-
+    
     @available(*, deprecated, message: "Deprecated in version 3.18.0. Please use Swift.Codable instead")
     open func mapping(map: Map) {
         fileId <- ("fileId", map[FileCodingKeys.entityId])
@@ -249,3 +241,4 @@ open class File: Object, JSONCodable {
 @available(*, deprecated, message: "Deprecated in version 3.18.0. Please use Swift.Codable instead")
 extension File : Mappable {
 }
+
