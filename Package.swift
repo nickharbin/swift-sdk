@@ -7,7 +7,7 @@ let package = Package(
     name: "Kinvey",
     platforms: [
         .macOS(.v10_12),
-        .iOS(.v14),
+        .iOS(.v14_1),
         .tvOS(.v10),
         .watchOS(.v3)
     ],
